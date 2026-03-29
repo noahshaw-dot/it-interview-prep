@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Support Interview Prep — Healthrite</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e; --surface: #111827; --surface2: #1a2333; --border: #1e3a5f;
+    --accent: #00d4ff; --accent2: #7c3aed; --accent3: #10b981; --warn: #f59e0b;
+    --text: #e2e8f0; --text-muted: #64748b; --text-dim: #94a3b8;
+    --mono: 'Space Mono', monospace; --sans: 'Syne', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
+  }
+  header { position: relative; z-index: 1; padding: 48px 40px 32px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, rgba(0,212,255,0.05) 0%, transparent 100%); }
+  .header-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--accent); background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.2); padding: 6px 14px; border-radius: 2px; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; animation: fadeDown 0.6s ease both; }
+  .header-badge::before { content: '▶'; font-size: 8px; }
+  h1 { font-family: var(--sans); font-weight: 800; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; animation: fadeDown 0.6s 0.1s ease both; }
+  h1 span { color: var(--accent); }
+  .header-sub { margin-top: 12px; color: var(--text-dim); font-size: 14px; font-family: var(--mono); animation: fadeDown 0.6s 0.2s ease both; }
+  .urgency-bar { display: inline-flex; align-items: center; gap: 10px; margin-top: 20px; padding: 10px 18px; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); border-radius: 4px; font-family: var(--mono); font-size: 12px; color: var(--warn); animation: fadeDown 0.6s 0.3s ease both; }
+  .pulse-dot { width: 8px; height: 8px; background: var(--warn); border-radius: 50%; animation: pulse 1.5s infinite; }
+
+  nav { position: sticky; top: 0; z-index: 100; display: flex; gap: 2px; padding: 0 40px; background: rgba(10,15,30,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); overflow-x: auto; }
+  nav button { font-family: var(--mono); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; padding: 16px 16px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+  nav button:hover { color: var(--text); border-bottom-color: rgba(0,212,255,0.3); }
+  nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  main { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+  .section { display: none; animation: fadeUp 0.4s ease both; }
+  .section.active { display: block; }
+
+  .section-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 32px; }
+  .section-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 22px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; flex-shrink: 0; }
+  .section-title { font-size: 22px; font-weight: 800; }
+  .section-desc { color: var(--text-dim); font-size: 13px; font-family: var(--mono); margin-top: 4px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 24px; margin-bottom: 16px; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s; }
+  .card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-1px); }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; }
+  .card.tech::before { background: var(--accent); }
+  .card.behavioural::before { background: var(--accent2); }
+  .card.scenario::before { background: var(--accent3); }
+  .card.tip::before { background: var(--warn); }
+  .card.highlight { border-color: rgba(0,212,255,0.35); }
+  .card.highlight::before { background: var(--accent); }
+
+  .card-label { font-family: var(--mono); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+  .card.tech .card-label { color: var(--accent); opacity: 0.7; }
+  .card.behavioural .card-label { color: var(--accent2); opacity: 0.7; }
+  .card.scenario .card-label { color: var(--accent3); opacity: 0.7; }
+  .card.tip .card-label { color: var(--warn); opacity: 0.7; }
+  .card.highlight .card-label { color: var(--accent); opacity: 1; }
+
+  .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+  .card p, .card li { font-size: 14px; line-height: 1.7; color: var(--text-dim); font-family: var(--mono); }
+  .card ul { padding-left: 18px; }
+  .card li { margin-bottom: 6px; }
+
+  .answer-toggle { margin-top: 14px; padding: 10px 16px; background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.15); border-radius: 3px; font-family: var(--mono); font-size: 12px; color: var(--accent); cursor: pointer; text-align: left; width: 100%; transition: background 0.2s; display: flex; align-items: center; gap: 8px; }
+  .answer-toggle:hover { background: rgba(0,212,255,0.1); }
+  .answer-toggle .arrow { transition: transform 0.2s; }
+  .answer-toggle.open .arrow { transform: rotate(90deg); }
+  .answer-content { display: none; margin-top: 12px; padding: 16px; background: rgba(0,212,255,0.03); border: 1px solid rgba(0,212,255,0.08); border-radius: 3px; }
+  .answer-content.open { display: block; }
+  .answer-content p, .answer-content li { font-size: 13px; color: var(--text-dim); line-height: 1.8; font-family: var(--mono); }
+  .answer-content ul { padding-left: 16px; margin-top: 8px; }
+  .answer-content li { margin-bottom: 4px; }
+
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .skill-chip { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; font-family: var(--mono); font-size: 12px; transition: all 0.2s; cursor: pointer; }
+  .skill-chip:hover { border-color: var(--accent3); }
+  .skill-chip.known { border-color: var(--accent3); background: rgba(16,185,129,0.08); }
+  .skill-chip.known .skill-dot { background: var(--accent3); }
+  .skill-chip.partial { border-color: var(--warn); background: rgba(245,158,11,0.06); }
+  .skill-chip.partial .skill-dot { background: var(--warn); }
+  .skill-chip.learning { border-color: var(--accent2); background: rgba(124,58,237,0.06); }
+  .skill-chip.learning .skill-dot { background: var(--accent2); }
+  .skill-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0; transition: background 0.2s; }
+
+  .progress-wrap { margin-bottom: 28px; }
+  .progress-label { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 12px; color: var(--text-dim); margin-bottom: 8px; }
+  .progress-bar { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0; transition: width 1s ease; }
+
+  .checklist { list-style: none; }
+  .checklist li { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-family: var(--mono); font-size: 13px; color: var(--text-dim); cursor: pointer; transition: color 0.2s; }
+  .checklist li:hover { color: var(--text); }
+  .checklist li.done { color: var(--text-muted); text-decoration: line-through; }
+  .check-box { width: 18px; height: 18px; border: 1px solid var(--border); border-radius: 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 10px; margin-top: 1px; transition: all 0.2s; }
+  .checklist li.done .check-box { background: var(--accent3); border-color: var(--accent3); color: #0a0f1e; }
+
+  .star-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .star-box { padding: 16px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface2); }
+  .star-letter { font-family: var(--sans); font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 4px; }
+  .star-label { font-family: var(--mono); font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .star-box p { font-family: var(--mono); font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+  .section-subtitle { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; margin-top: 32px; }
+
+  .quote-block { margin-top: 12px; padding: 16px 20px; background: rgba(0,212,255,0.04); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; font-family: var(--mono); font-size: 13px; color: var(--text-dim); line-height: 1.8; font-style: italic; }
+
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+
+  @media (max-width: 600px) {
+    header { padding: 32px 20px 24px; }
+    nav { padding: 0 8px; }
+    main { padding: 28px 16px 60px; }
+    .star-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Healthrite Pharmacy &amp; Supermart</div>
+  <h1>IT Support Officer<br><span>Interview Toolkit</span></h1>
+  <p class="header-sub">// self-taught &middot; Lagos &middot; 24/7 retail &amp; pharmacy IT</p>
+  <div class="urgency-bar">
+    <div class="pulse-dot"></div>
+    Tailored for Healthrite &mdash; POS &middot; LAN/WAN &middot; Server Admin &middot; Cybersecurity
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('healthrite', this)">🏥 Healthrite</button>
+  <button onclick="showSection('technical', this)">🔧 Technical</button>
+  <button onclick="showSection('interview-qa', this)">💬 Interview Q&amp;A</button>
+  <button onclick="showSection('behavioural', this)">🧠 Behavioural</button>
+  <button onclick="showSection('checklist', this)">✅ Day-of Checklist</button>
+</nav>
+
+<main>
+
+  <!-- HEALTHRITE -->
+  <div id="healthrite" class="section active">
+    <div class="section-header">
+      <div class="section-icon">🏥</div>
+      <div>
+        <div class="section-title">Know Your Employer</div>
+        <div class="section-desc">// study this before you walk in the door</div>
+      </div>
+    </div>
+
+    <div class="card tip">
+      <div class="card-label">Company Overview</div>
+      <h3>What is Healthrite Pharmacy &amp; Supermart?</h3>
+      <ul>
+        <li>24-hour pharmacy and supermart based in Lagos, Nigeria</li>
+        <li>Sells medications, wellness products, baby care, medical supplies, supplements and everyday supermarket items</li>
+        <li>Licensed pharmacists on-site for health consultations and prescription support</li>
+        <li>Online orders, doorstep delivery and nationwide logistics available</li>
+        <li>One of the top pharmacies in Lagos — <strong>uptime is non-negotiable</strong>, they operate 24/7</li>
+        <li>Website: healthritepharm.com</li>
+      </ul>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">What They Need From You — The 4 Key Skills</div>
+      <h3>Match yourself to the job description</h3>
+      <ul>
+        <li><strong>POS Systems</strong> — The checkout terminals at pharmacy &amp; supermart counters. If this goes down, sales stop. Your job is to keep it running</li>
+        <li><strong>Networking (LAN/WAN)</strong> — Connecting all computers, POS terminals, printers and servers across the store. Cables, switches, routers, IP addressing</li>
+        <li><strong>Server Administration</strong> — Managing the servers that store inventory, sales records, user accounts and possibly prescription data</li>
+        <li><strong>Cybersecurity</strong> — Protecting customer data and prescription records. Healthcare is a high-value target — security cannot be an afterthought</li>
+      </ul>
+    </div>
+
+    <div class="card scenario">
+      <div class="card-label">Your Strategy — Self-Taught Positioning</div>
+      <h3>How to own the experience gap confidently</h3>
+      <ul>
+        <li>They want 2–3 years — you don't have that formally. Lead with drive, fast learning, and hands-on mindset</li>
+        <li>Self-taught = independent problem solver. In IT, researching effectively is a genuine skill — own it</li>
+        <li>A 24/7 pharmacy needs someone calm and reliable. Show you don't panic under pressure</li>
+        <li>Show you understand the stakes: "Every minute of POS downtime = lost sales and frustrated customers"</li>
+        <li>Healthcare data is sensitive — demonstrate you take security seriously from day one</li>
+      </ul>
+    </div>
+
+    <div class="card tip">
+      <div class="card-label">Smart Questions To Ask Them</div>
+      <h3>Healthrite-specific questions that show you've done your homework</h3>
+      <ul>
+        <li>"How many POS terminals are you running and are they all on the same network?"</li>
+        <li>"Do you have an on-call or escalation process for IT issues that happen overnight?"</li>
+        <li>"Is your infrastructure currently on-premise or moving toward any cloud services?"</li>
+        <li>"How do you currently handle data backups for prescription and inventory records?"</li>
+        <li>"Are there plans to expand to more branches, and would this IT role grow with that?"</li>
+      </ul>
+    </div>
+
+    <div class="card highlight">
+      <div class="card-label">⭐ Power Line — Use This In The Interview</div>
+      <h3>Drop this when they ask why you want the role</h3>
+      <div class="quote-block">
+        "I understand that for a 24/7 operation like Healthrite, every minute of downtime directly impacts customers and revenue — and in a pharmacy, that's even more critical because people depend on you for their health. That's why I take a structured, methodical approach to troubleshooting. I want to fix it right, and fix it fast."
+      </div>
+    </div>
+  </div>
+
+  <!-- TECHNICAL -->
+  <div id="technical" class="section">
+    <div class="section-header">
+      <div class="section-icon">🔧</div>
+      <div>
+        <div class="section-title">Technical Skills Review</div>
+        <div class="section-desc">// click each skill chip to track your confidence</div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Skills confidence</span><span id="progress-pct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+    <p class="section-subtitle">Click to cycle: unknown → learning → partial → known</p>
+    <div class="skills-grid" id="skills-grid"></div>
+
+    <div class="divider"></div>
+    <p class="section-subtitle">Core concepts to know</p>
+
+    <div class="card highlight">
+      <div class="card-label">⭐ Healthrite Priority · POS Systems</div>
+      <h3>Point of Sale — what you must know</h3>
+      <ul>
+        <li><strong>What it is:</strong> The checkout system — hardware (terminal, receipt printer, card reader, barcode scanner) + billing/inventory software</li>
+        <li><strong>Common issues:</strong> Won't connect to network, card reader failing, receipt printer jammed, software crash, slow transactions</li>
+        <li><strong>Troubleshoot:</strong> Check LAN cable/network → restart POS software → check card reader drivers → clear printer queue → escalate if hardware fault</li>
+        <li><strong>Why it matters:</strong> POS downtime = zero sales. A 24/7 pharmacy cannot afford this — speed of resolution is everything</li>
+        <li><strong>Tip:</strong> Ask them what POS software/brand they use — shows initiative and sets you up to prep more</li>
+      </ul>
+    </div>
+
+    <div class="card highlight">
+      <div class="card-label">⭐ Healthrite Priority · Server Administration</div>
+      <h3>Server Admin basics you should know</h3>
+      <ul>
+        <li><strong>What a server does:</strong> Central machine that stores data, runs apps, manages user accounts and network resources for the whole organisation</li>
+        <li><strong>Windows Server:</strong> Most common in SMEs — manages Active Directory, file sharing, print services, DNS/DHCP</li>
+        <li><strong>Key tasks:</strong> Create/manage user accounts, monitor server health (CPU, RAM, disk), apply updates, manage backups</li>
+        <li><strong>Backups:</strong> Critical in pharmacy — patient and inventory records must be backed up daily. Know: local vs cloud vs offsite backup</li>
+        <li><strong>Uptime monitoring:</strong> Check Windows Event Viewer logs and respond to alerts before they become outages</li>
+      </ul>
+    </div>
+
+    <div class="card highlight">
+      <div class="card-label">⭐ Healthrite Priority · Cybersecurity</div>
+      <h3>Security in a pharmacy environment</h3>
+      <ul>
+        <li>Pharmacy data is sensitive — prescription records, customer PII, payment data are all targets</li>
+        <li>Password policies — complexity requirements, expiry, MFA (multi-factor authentication)</li>
+        <li>Phishing — fraudulent emails targeting staff credentials, especially common in retail</li>
+        <li>Ransomware can encrypt all data including patient records — backups are the primary defence</li>
+        <li>Principle of least privilege — cashier doesn't need admin rights on the server</li>
+        <li>PCI-DSS awareness — card payment data has strict legal security requirements</li>
+        <li>Physical security — who has access to the server room? Are terminals locked when unattended?</li>
+      </ul>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Networking Basics — LAN/WAN</div>
+      <h3>Network fundamentals for Healthrite</h3>
+      <ul>
+        <li>LAN = Local Area Network (all devices inside the store connected together)</li>
+        <li>WAN = Wide Area Network (connects branches to each other or to the internet)</li>
+        <li>IP addressing — every device needs an IP. Private: 192.168.x.x or 10.x.x.x</li>
+        <li>DNS = translates domain names to IPs. DHCP = automatically assigns IPs to devices</li>
+        <li>Switch = connects multiple devices on LAN. Router = connects LAN to the internet</li>
+        <li>Key commands: ipconfig, ping 8.8.8.8, tracert, netstat</li>
+      </ul>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Operating Systems</div>
+      <h3>Windows — the daily driver</h3>
+      <ul>
+        <li>Task Manager — check CPU, RAM, disk usage; kill stuck processes</li>
+        <li>Event Viewer — logs of system errors and warnings for diagnosing issues</li>
+        <li>Device Manager — manage and update hardware drivers</li>
+        <li>Safe Mode — boots with minimal drivers, great for troubleshooting</li>
+        <li>Services.msc — manage background services (e.g. Print Spooler, DHCP client)</li>
+        <li>CMD: ipconfig, ping, tracert, sfc /scannow, net user, netstat</li>
+      </ul>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Hardware</div>
+      <h3>Physical components</h3>
+      <ul>
+        <li>CPU (processor), RAM (temporary memory), HDD/SSD (storage), Motherboard (connects everything)</li>
+        <li>POST = Power-On Self Test — beep codes at startup indicate hardware faults</li>
+        <li>BIOS/UEFI = firmware that initialises hardware before the OS loads</li>
+        <li>POS-specific hardware: receipt printer, barcode scanner, card reader, customer display</li>
+      </ul>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Ticketing &amp; Support</div>
+      <h3>Service desk essentials</h3>
+      <ul>
+        <li>ITIL basics — Incident (something broke), Problem (root cause investigation), Change (planned update)</li>
+        <li>SLA = Service Level Agreement — the time target you must resolve issues within</li>
+        <li>Ticketing tools: Freshdesk, Jira Service Desk, ServiceNow, Zendesk</li>
+        <li>Escalation — know when to move to L2/L3 rather than keep attempting yourself</li>
+        <li>Remote support tools: AnyDesk, TeamViewer, Windows Remote Desktop (RDP)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- INTERVIEW Q&A -->
+  <div id="interview-qa" class="section">
+    <div class="section-header">
+      <div class="section-icon">💬</div>
+      <div>
+        <div class="section-title">Common IT Support Q&amp;A</div>
+        <div class="section-desc">// click to reveal how to answer each question</div>
+      </div>
+    </div>
+
+    <p class="section-subtitle">⭐ Healthrite-specific scenarios</p>
+
+    <div class="card highlight">
+      <div class="card-label">Scenario · POS Down</div>
+      <h3>"The POS terminal at the pharmacy counter has stopped working. What do you do?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <p>Stay calm — this is high priority. Move quickly and systematically:</p>
+        <ul>
+          <li>Check if it's one terminal or all of them — this tells you if it's local or network/server</li>
+          <li>If one terminal: check power, cables, restart the POS application</li>
+          <li>If all terminals: check the network switch and server — likely a central issue</li>
+          <li>Ping the server from the terminal to check connectivity (cmd: ping [server IP])</li>
+          <li>Restart the POS service on the server if network is fine</li>
+          <li>If hardware fault (card reader, printer), swap with a spare unit if available</li>
+          <li>Keep staff updated every few minutes — communication is critical</li>
+          <li>Escalate if not resolved in 10–15 minutes — this is 24/7 retail, every minute counts</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card highlight">
+      <div class="card-label">Scenario · Network Outage</div>
+      <h3>"The store's internet went down at 2am. How do you respond?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>First: is it internet only, or is the whole internal network down? (Can devices ping each other?)</li>
+          <li>Restart the router — wait 2 minutes to see if it reconnects to the ISP</li>
+          <li>Check if ISP is having an outage (call their support line or check status page)</li>
+          <li>Check if POS can operate in offline mode — some systems queue transactions locally</li>
+          <li>If router is faulty, escalate to ISP support or swap the device if a spare is available</li>
+          <li>Document: time the outage started, impact on operations, actions taken, resolution time</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card highlight">
+      <div class="card-label">Scenario · Security Incident</div>
+      <h3>"A staff member clicked a suspicious email link. What do you do?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>Stay calm — don't alarm them, but act fast</li>
+          <li>Disconnect their machine from the network immediately (unplug cable / disable WiFi)</li>
+          <li>Run a full antivirus/malware scan on the machine</li>
+          <li>Reset their password right away — assume credentials may be compromised</li>
+          <li>Check if any sensitive files were accessed or encrypted (ransomware indicator)</li>
+          <li>Report the incident to management — pharmacy data breaches can have legal implications</li>
+          <li>After resolution: educate the staff member, don't shame them — phishing works on everyone</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <p class="section-subtitle">General technical questions</p>
+
+    <div class="card tech">
+      <div class="card-label">Technical · Classic</div>
+      <h3>"A user says their computer is slow. What do you do?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>Ask when it started and if anything changed recently</li>
+          <li>Check Task Manager for high CPU, RAM or disk usage</li>
+          <li>Check startup programs — too many slow boot and performance (Task Manager → Startup)</li>
+          <li>Run an antivirus scan for malware</li>
+          <li>Check disk space — low storage significantly slows machines</li>
+          <li>Clear temp files, restart if not done recently</li>
+          <li>If hardware is old, recommend RAM upgrade or switch to SSD</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Technical · Network</div>
+      <h3>"A user can't connect to the internet. How do you troubleshoot?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>Ask: is it just them or others too? (scopes the problem)</li>
+          <li>Check physical connection — cable plugged in / WiFi connected?</li>
+          <li>Run ipconfig — valid IP? (169.x.x.x means no DHCP response — network fault)</li>
+          <li>Ping 8.8.8.8 — if this works, it's a DNS issue not a connectivity issue</li>
+          <li>Try a different browser or device to narrow the cause</li>
+          <li>Restart router or switch if appropriate</li>
+          <li>Check proxy or VPN settings that might be interfering</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Technical · Account</div>
+      <h3>"A user is locked out of their account. What do you do?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <ul>
+          <li><strong>Verify their identity first</strong> — never skip this, it's a security control</li>
+          <li>Check if account is locked in Active Directory or the relevant system</li>
+          <li>Unlock and/or reset password following company policy</li>
+          <li>Advise them on password policy (length, complexity, don't reuse old passwords)</li>
+          <li>Log the incident ticket with the action taken</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Technical · Printer</div>
+      <h3>"A printer isn't printing. How do you fix it?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>Check the printer is powered on and not showing as offline or paused</li>
+          <li>Clear the print queue — stuck jobs block everything behind them</li>
+          <li>Restart the Print Spooler service in Windows (services.msc)</li>
+          <li>Check cable / WiFi connection between PC and printer</li>
+          <li>Check ink/toner and paper levels</li>
+          <li>Reinstall or update printer drivers if nothing else works</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <p class="section-subtitle">Role &amp; knowledge questions</p>
+
+    <div class="card scenario">
+      <div class="card-label">Situational</div>
+      <h3>"What is Active Directory and how would you use it at Healthrite?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <p>Active Directory (AD) is Microsoft's system for managing users, computers and permissions across an organisation. At Healthrite you'd use it to:</p>
+        <ul>
+          <li>Create accounts for new staff and disable them when staff leave</li>
+          <li>Reset passwords and unlock locked accounts</li>
+          <li>Assign users to groups — e.g. pharmacists get different access to systems than cashiers</li>
+          <li>Apply Group Policies (GPO) to enforce security settings across all machines in the store</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card scenario">
+      <div class="card-label">Situational</div>
+      <h3>"How would you prioritise multiple IT issues coming in at once?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <p>Prioritise by business impact — always:</p>
+        <ul>
+          <li><strong>Critical:</strong> POS down, full network outage, server down — revenue and operations are stopped</li>
+          <li><strong>High:</strong> Multiple users affected, system that blocks work from happening</li>
+          <li><strong>Medium:</strong> Single user issue that slows but doesn't stop their work</li>
+          <li><strong>Low:</strong> Cosmetic issues, non-urgent requests, general queries</li>
+          <li>Acknowledge all tickets — let users know you've seen their issue and give an ETA</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEHAVIOURAL -->
+  <div id="behavioural" class="section">
+    <div class="section-header">
+      <div class="section-icon">🧠</div>
+      <div>
+        <div class="section-title">Behavioural &amp; Soft Skills</div>
+        <div class="section-desc">// use the STAR method for every behavioural answer</div>
+      </div>
+    </div>
+
+    <div class="card tip">
+      <div class="card-label">Framework · Must Know</div>
+      <h3>The STAR Method</h3>
+      <p>Structure every single behavioural answer this way.</p>
+      <div class="star-grid">
+        <div class="star-box"><div class="star-letter">S</div><div class="star-label">Situation</div><p>Set the scene briefly. What was the context?</p></div>
+        <div class="star-box"><div class="star-letter">T</div><div class="star-label">Task</div><p>What was your specific role or responsibility?</p></div>
+        <div class="star-box"><div class="star-letter">A</div><div class="star-label">Action</div><p>What did YOU do? Use "I" not "we".</p></div>
+        <div class="star-box"><div class="star-letter">R</div><div class="star-label">Result</div><p>What was the outcome? What did you learn?</p></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <p class="section-subtitle">Common behavioural questions</p>
+
+    <div class="card behavioural">
+      <div class="card-label">Behavioural · Classic</div>
+      <h3>"Tell me about yourself."</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <p>Use a 60-second structure: Who → What you've done → Why Healthrite.</p>
+        <ul>
+          <li><strong>Who:</strong> "I'm a self-taught IT enthusiast who has been building practical skills through hands-on projects and continuous learning."</li>
+          <li><strong>What:</strong> Mention real things — fixing devices, setting up networks, courses completed (CompTIA, Google IT, etc.), personal projects</li>
+          <li><strong>Why Healthrite:</strong> "I'm drawn to IT in a 24/7 healthcare environment because the stakes are real — systems have to work perfectly, and I want to be the person who makes sure they do."</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card behavioural">
+      <div class="card-label">Behavioural · Problem Solving</div>
+      <h3>"Describe a time you solved a difficult technical problem."</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <p>Self-taught means your experience comes from personal projects — that's valid and real:</p>
+        <ul>
+          <li>Fixing a computer for a family member or friend</li>
+          <li>Troubleshooting your own network or internet connection</li>
+          <li>Setting up a home lab, configuring a router, recovering lost data</li>
+          <li>A project where something broke and you had to research and fix it</li>
+        </ul>
+        <p style="margin-top:8px">Use STAR. Focus on your thought process, how you researched the issue, and the result.</p>
+      </div>
+    </div>
+
+    <div class="card behavioural">
+      <div class="card-label">Behavioural · Customer Service</div>
+      <h3>"How do you handle a frustrated or impatient user?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>Stay calm — never mirror their frustration</li>
+          <li>Listen fully before responding — let them feel heard</li>
+          <li>Acknowledge it: "I understand this is affecting your work, let me get it fixed now."</li>
+          <li>Give updates while you work — silence makes frustration worse</li>
+          <li>Focus on the fix, not the cause or blame</li>
+          <li>At Healthrite: a cashier with a broken POS is under real pressure — be fast and reassuring</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card behavioural">
+      <div class="card-label">Behavioural · Honesty</div>
+      <h3>"What do you do when you don't know the answer?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <p>They want honesty and resourcefulness — not overconfidence:</p>
+        <ul>
+          <li>"I'd be upfront with the user — I'll find the answer and get back to them quickly."</li>
+          <li>"I'd check documentation, search for the issue, or consult a more experienced colleague."</li>
+          <li>"I believe in escalating when needed rather than guessing and making things worse."</li>
+          <li>Being self-taught means you're naturally good at finding answers — highlight that</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card behavioural">
+      <div class="card-label">Behavioural · Growth</div>
+      <h3>"Why IT Support, and where do you see yourself in 3 years?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>Be genuine — you've been self-teaching, so it's clearly a passion, not just a job</li>
+          <li>Show ambition: "I want to build a strong foundation in support, then grow into networking, server admin or cybersecurity."</li>
+          <li>Mention certifications you're working toward: CompTIA A+, Network+, Google IT Certificate, Microsoft certs</li>
+          <li>Tie it to Healthrite: "I want to grow as the company grows — especially if you expand to more branches"</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card highlight">
+      <div class="card-label">⭐ Healthrite-Specific Behavioural</div>
+      <h3>"Why do you want to work at a pharmacy specifically?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>"IT in healthcare is where the stakes are highest — systems have to work because people depend on them for their health."</li>
+          <li>"I'm drawn to environments where my work has real impact beyond just business metrics."</li>
+          <li>"A 24/7 operation means the role is never routine — I'll face real challenges constantly, and that's where I learn fastest."</li>
+          <li>Mention that you understand the responsibility of handling sensitive health data and take that seriously</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card tip">
+      <div class="card-label">Pro Tip · End Strong</div>
+      <h3>Questions to ask the interviewer — always have these ready</h3>
+      <ul>
+        <li>"What does a typical first week look like for someone in this role?"</li>
+        <li>"How many POS terminals are you running and what software do they use?"</li>
+        <li>"Is there an on-call expectation given you operate 24/7?"</li>
+        <li>"What does the IT team look like — how many people and how is it structured?"</li>
+        <li>"Are there opportunities for certifications or professional development support?"</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div id="checklist" class="section">
+    <div class="section-header">
+      <div class="section-icon">✅</div>
+      <div>
+        <div class="section-title">Day-of Checklist</div>
+        <div class="section-desc">// click each item to mark as done</div>
+      </div>
+    </div>
+
+    <div class="card tip">
+      <div class="card-label">The Night Before</div>
+      <h3>Prepare tonight</h3>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Review the Healthrite tab — know the company cold</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Re-read the job description — map your skills to POS, networking, server admin, cybersecurity</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Prepare 2–3 personal STAR examples (problem solved, frustrated user, thing you learned)</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Review the Technical and Q&amp;A tabs on this page</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Write down your 5 questions to ask the interviewer</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Visit healthritepharm.com — check the site, know their vibe</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Plan your outfit — smart, clean, professional</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Confirm interview time and location (or video link)</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Get a proper night's sleep</li>
+      </ul>
+    </div>
+
+    <div class="card scenario">
+      <div class="card-label">The Day Of</div>
+      <h3>Interview day actions</h3>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Eat a proper meal beforehand — don't go in hungry</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Arrive 10–15 minutes early</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Bring your CV/resume printed (or have it open on your phone)</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Bring a notepad and pen</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Phone on silent before you walk in</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Slow down when answering — it is okay to pause and think</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Smile, make eye contact, be yourself</li>
+      </ul>
+    </div>
+
+    <div class="card highlight">
+      <div class="card-label">Final Mindset — Read This Last</div>
+      <h3>Walk in with this energy</h3>
+      <ul>
+        <li>Being self-taught is a <strong>strength</strong> — it shows you're driven and can figure things out independently</li>
+        <li>You don't need to know everything — show how you <strong>think, learn and adapt</strong></li>
+        <li>If you don't know something: "I'd research it, ask a colleague, or escalate appropriately" — that's the right answer</li>
+        <li>Healthrite needs someone reliable and calm. You've prepped. You are that person</li>
+        <li>Attitude and hunger matter as much as experience at entry level — bring both in abundance</li>
+        <li style="color: var(--accent3); font-weight: 600;">You've done the work. Walk in like you belong there. Because you do. 💪</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function showSection(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggleAnswer(btn) {
+    btn.classList.toggle('open');
+    btn.nextElementSibling.classList.toggle('open');
+  }
+
+  function toggleCheck(li) {
+    li.classList.toggle('done');
+    li.querySelector('.check-box').textContent = li.classList.contains('done') ? '✓' : '';
+  }
+
+  const skills = [
+    'POS Systems', 'Server Admin', 'LAN/WAN Networking', 'Cybersecurity',
+    'Windows OS', 'Active Directory', 'TCP/IP & DNS', 'Data Backups',
+    'Hardware setup', 'Printer support', 'Remote Desktop', 'Ticketing tools',
+    'CMD / Terminal', 'BIOS / UEFI', 'Office 365', 'Troubleshooting'
+  ];
+
+  const states = [null, 'learning', 'partial', 'known'];
+  const grid = document.getElementById('skills-grid');
+  const chipStates = {};
+
+  skills.forEach(skill => {
+    chipStates[skill] = 0;
+    const chip = document.createElement('div');
+    chip.className = 'skill-chip';
+    chip.innerHTML = `<span class="skill-dot"></span><span>${skill}</span>`;
+    chip.onclick = () => {
+      chipStates[skill] = (chipStates[skill] + 1) % 4;
+      const s = states[chipStates[skill]];
+      chip.className = 'skill-chip' + (s ? ' ' + s : '');
+      updateProgress();
+    };
+    grid.appendChild(chip);
+  });
+
+  function updateProgress() {
+    const known = Object.values(chipStates).filter(v => v === 3).length;
+    const partial = Object.values(chipStates).filter(v => v === 2).length;
+    const pct = Math.round(((known + partial * 0.5) / skills.length) * 100);
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  setTimeout(updateProgress, 300);
+</script>
+</body>
+</html>
