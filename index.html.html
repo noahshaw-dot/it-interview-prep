@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Support Interview Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --surface2: #1a2333;
+    --border: #1e3a5f;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --warn: #f59e0b;
+    --text: #e2e8f0;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: relative;
+    z-index: 1;
+    padding: 48px 40px 32px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(0,212,255,0.05) 0%, transparent 100%);
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 6px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .header-badge::before { content: '▶'; font-size: 8px; }
+
+  h1 {
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .header-sub {
+    margin-top: 12px;
+    color: var(--text-dim);
+    font-size: 15px;
+    font-family: var(--mono);
+    animation: fadeDown 0.6s 0.2s ease both;
+  }
+
+  .urgency-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 10px 18px;
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--warn);
+    animation: fadeDown 0.6s 0.3s ease both;
+  }
+
+  .pulse-dot {
+    width: 8px; height: 8px;
+    background: var(--warn);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+
+  /* ─── NAV TABS ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    gap: 2px;
+    padding: 0 40px;
+    background: rgba(10,15,30,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  nav button {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 16px 20px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  nav button:hover { color: var(--text); border-bottom-color: rgba(0,212,255,0.3); }
+  nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ─── MAIN ─── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .section { display: none; animation: fadeUp 0.4s ease both; }
+  .section.active { display: block; }
+
+  /* ─── SECTION HEADERS ─── */
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .section-icon {
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .section-title { font-size: 22px; font-weight: 800; }
+  .section-desc { color: var(--text-dim); font-size: 13px; font-family: var(--mono); margin-top: 4px; }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-1px); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+  }
+
+  .card.tech::before { background: var(--accent); }
+  .card.behavioural::before { background: var(--accent2); }
+  .card.scenario::before { background: var(--accent3); }
+  .card.tip::before { background: var(--warn); }
+
+  .card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.6;
+  }
+
+  .card.tech .card-label { color: var(--accent); }
+  .card.behavioural .card-label { color: var(--accent2); }
+  .card.scenario .card-label { color: var(--accent3); }
+  .card.tip .card-label { color: var(--warn); }
+
+  .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+
+  .card p, .card li {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    font-family: var(--mono);
+  }
+
+  .card ul { padding-left: 18px; }
+  .card li { margin-bottom: 6px; }
+
+  .answer-toggle {
+    margin-top: 14px;
+    padding: 10px 16px;
+    background: rgba(0,212,255,0.05);
+    border: 1px solid rgba(0,212,255,0.15);
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .answer-toggle:hover { background: rgba(0,212,255,0.1); }
+  .answer-toggle .arrow { transition: transform 0.2s; }
+  .answer-toggle.open .arrow { transform: rotate(90deg); }
+
+  .answer-content {
+    display: none;
+    margin-top: 12px;
+    padding: 16px;
+    background: rgba(0,212,255,0.03);
+    border: 1px solid rgba(0,212,255,0.08);
+    border-radius: 3px;
+  }
+
+  .answer-content.open { display: block; }
+  .answer-content p, .answer-content li {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    font-family: var(--mono);
+  }
+
+  .answer-content ul { padding-left: 16px; margin-top: 8px; }
+  .answer-content li { margin-bottom: 4px; }
+
+  /* ─── SKILLS GRID ─── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .skill-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .skill-chip:hover { border-color: var(--accent3); background: rgba(16,185,129,0.05); }
+  .skill-chip.known { border-color: var(--accent3); background: rgba(16,185,129,0.08); }
+  .skill-chip.known .skill-dot { background: var(--accent3); }
+  .skill-chip.partial { border-color: var(--warn); background: rgba(245,158,11,0.06); }
+  .skill-chip.partial .skill-dot { background: var(--warn); }
+  .skill-chip.learning { border-color: var(--accent2); background: rgba(124,58,237,0.06); }
+  .skill-chip.learning .skill-dot { background: var(--accent2); }
+
+  .skill-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress-wrap { margin-bottom: 28px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0;
+    transition: width 1s ease;
+  }
+
+  /* ─── CHECKLIST ─── */
+  .checklist { list-style: none; }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .checklist li:hover { color: var(--text); }
+  .checklist li.done { color: var(--text-muted); text-decoration: line-through; }
+
+  .check-box {
+    width: 18px; height: 18px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 10px;
+    margin-top: 1px;
+    transition: all 0.2s;
+  }
+
+  .checklist li.done .check-box {
+    background: var(--accent3);
+    border-color: var(--accent3);
+    color: #0a0f1e;
+  }
+
+  /* ─── STAR METHOD ─── */
+  .star-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .star-box {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface2);
+  }
+
+  .star-letter {
+    font-family: var(--sans);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .star-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .star-box p {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  /* ─── TAGS ─── */
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin: 2px;
+    letter-spacing: 1px;
+  }
+
+  .tag-blue { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+  .tag-green { background: rgba(16,185,129,0.1); color: var(--accent3); border: 1px solid rgba(16,185,129,0.2); }
+  .tag-purple { background: rgba(124,58,237,0.1); color: #a78bfa; border: 1px solid rgba(124,58,237,0.2); }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+  }
+
+  .section-subtitle {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    margin-top: 32px;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 32px 20px 24px; }
+    nav { padding: 0 12px; }
+    main { padding: 28px 16px 60px; }
+    .star-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Interview Prep</div>
+  <h1>IT Support Officer<br><span>Interview Toolkit</span></h1>
+  <p class="header-sub">// self-taught · entry level · ready to crush it</p>
+  <div class="urgency-bar">
+    <div class="pulse-dot"></div>
+    Interview incoming — stay focused, you've got this
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('technical')">🔧 Technical</button>
+  <button onclick="showSection('interview-qa')">💬 Interview Q&A</button>
+  <button onclick="showSection('behavioural')">🧠 Behavioural</button>
+  <button onclick="showSection('checklist')">✅ Day-of Checklist</button>
+</nav>
+
+<main>
+
+  <!-- ─── TECHNICAL SKILLS ─── -->
+  <div id="technical" class="section active">
+    <div class="section-header">
+      <div class="section-icon">🔧</div>
+      <div>
+        <div class="section-title">Technical Skills Review</div>
+        <div class="section-desc">// click each skill to mark your confidence level</div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>Skills confidence</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <p class="section-subtitle">Click chips to cycle: unknown → learning → partial → known</p>
+
+    <div class="skills-grid" id="skills-grid">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="divider"></div>
+
+    <p class="section-subtitle">Core concepts to know</p>
+
+    <div class="card tech">
+      <div class="card-label">Networking Basics</div>
+      <h3>What every IT Support should know</h3>
+      <ul>
+        <li>IP addressing (IPv4) — e.g. 192.168.1.x is a private local IP</li>
+        <li>DNS = translates domain names to IP addresses (like a phone book)</li>
+        <li>DHCP = automatically assigns IP addresses to devices on a network</li>
+        <li>TCP/IP = the core protocol suite the internet runs on</li>
+        <li>Ping & ipconfig/ifconfig = tools to diagnose network issues</li>
+        <li>LAN (local) vs WAN (wide/internet)</li>
+      </ul>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Operating Systems</div>
+      <h3>Windows & basics</h3>
+      <ul>
+        <li>Task Manager — check CPU, memory, disk usage and kill processes</li>
+        <li>Event Viewer — logs of errors and warnings on the system</li>
+        <li>Device Manager — manage/update drivers for hardware</li>
+        <li>Control Panel / Settings — change system config, users, printers</li>
+        <li>Safe Mode — boots Windows with minimal drivers for troubleshooting</li>
+        <li>CMD commands: ipconfig, ping, tracert, netstat, sfc /scannow</li>
+      </ul>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Hardware</div>
+      <h3>Physical components</h3>
+      <ul>
+        <li>CPU (processor), RAM (temporary memory), HDD/SSD (storage)</li>
+        <li>Motherboard = connects all components</li>
+        <li>GPU = graphics processing</li>
+        <li>POST = Power-On Self Test (what happens when you boot)</li>
+        <li>BIOS/UEFI = firmware that initialises hardware before OS loads</li>
+      </ul>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Ticketing & Support</div>
+      <h3>Service desk essentials</h3>
+      <ul>
+        <li>ITIL basics — Incident, Problem, Change management</li>
+        <li>Ticketing tools: Jira Service Desk, Freshdesk, ServiceNow, Zendesk</li>
+        <li>SLA = Service Level Agreement (time targets for resolving issues)</li>
+        <li>Escalation — know when to escalate to L2/L3 support</li>
+        <li>Remote support tools: AnyDesk, TeamViewer, Remote Desktop (RDP)</li>
+      </ul>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Security Fundamentals</div>
+      <h3>IT Security basics</h3>
+      <ul>
+        <li>Password policies — complexity, expiry, multi-factor auth (MFA)</li>
+        <li>Phishing — fraudulent emails trying to steal credentials</li>
+        <li>Malware types: virus, ransomware, spyware, trojan</li>
+        <li>Principle of least privilege — users get only what they need</li>
+        <li>VPN = encrypted tunnel to connect remotely to a network</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ─── INTERVIEW Q&A ─── -->
+  <div id="interview-qa" class="section">
+    <div class="section-header">
+      <div class="section-icon">💬</div>
+      <div>
+        <div class="section-title">Common IT Support Q&A</div>
+        <div class="section-desc">// click "Show answer" to see how to respond</div>
+      </div>
+    </div>
+
+    <p class="section-subtitle">Technical questions</p>
+
+    <div class="card tech">
+      <div class="card-label">Technical · Classic</div>
+      <h3>A user says "my computer is slow." What do you do?</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <p>Walk through a structured approach:</p>
+        <ul>
+          <li>Ask when it started and if anything changed recently</li>
+          <li>Check Task Manager for high CPU, RAM or disk usage</li>
+          <li>Look for too many startup programs (msconfig or Task Manager > Startup)</li>
+          <li>Check for malware using antivirus scan</li>
+          <li>Check disk space — low storage slows machines down</li>
+          <li>Suggest clearing temp files, or restarting if not done recently</li>
+          <li>If hardware is old, may recommend RAM upgrade or SSD</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Technical · Network</div>
+      <h3>A user can't connect to the internet. How do you troubleshoot?</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <p>Follow a logical top-down approach:</p>
+        <ul>
+          <li>Ask: is it just them or others too? (isolates issue scope)</li>
+          <li>Check physical: is the cable plugged in / WiFi connected?</li>
+          <li>Run ipconfig — do they have a valid IP? (169.x.x.x = no DHCP)</li>
+          <li>Ping 8.8.8.8 — if works, issue is DNS not connectivity</li>
+          <li>Try a different browser or device to narrow down</li>
+          <li>Restart router/switch if appropriate</li>
+          <li>Check if proxy or VPN settings are interfering</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Technical · Password</div>
+      <h3>A user is locked out of their account. What do you do?</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>Verify the user's identity first (never skip this step — it's a security risk)</li>
+          <li>Check if account is locked in Active Directory or the system</li>
+          <li>Unlock and/or reset password following company policy</li>
+          <li>Advise them on password policy (length, complexity)</li>
+          <li>Log the ticket appropriately</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Technical · Printer</div>
+      <h3>A printer isn't printing. How do you fix it?</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>Check the printer is powered on and online (not paused or offline)</li>
+          <li>Clear the print queue — stuck jobs block everything</li>
+          <li>Restart the Print Spooler service in Windows</li>
+          <li>Check cables / WiFi connection to the printer</li>
+          <li>Verify ink/toner levels and paper</li>
+          <li>Reinstall or update printer drivers if needed</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <p class="section-subtitle">Role & situational questions</p>
+
+    <div class="card scenario">
+      <div class="card-label">Situational</div>
+      <h3>What does IT Support actually do day-to-day?</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <p>IT Support Officers typically:</p>
+        <ul>
+          <li>Respond to and resolve user tickets (hardware, software, network issues)</li>
+          <li>Set up and configure computers, accounts and peripherals</li>
+          <li>Maintain and monitor IT infrastructure</li>
+          <li>Manage user accounts in Active Directory</li>
+          <li>Ensure security policies are followed</li>
+          <li>Document solutions and update the knowledge base</li>
+          <li>Escalate complex issues to senior engineers</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card scenario">
+      <div class="card-label">Situational</div>
+      <h3>What is Active Directory and what would you use it for?</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show suggested answer</button>
+      <div class="answer-content">
+        <p>Active Directory (AD) is Microsoft's directory service for managing users, computers and permissions in an organisation. As IT Support you would use it to:</p>
+        <ul>
+          <li>Create, disable, unlock or reset user accounts</li>
+          <li>Assign users to groups for access control</li>
+          <li>Apply Group Policies (GPO) to enforce security settings</li>
+          <li>Manage computer accounts on the domain</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── BEHAVIOURAL ─── -->
+  <div id="behavioural" class="section">
+    <div class="section-header">
+      <div class="section-icon">🧠</div>
+      <div>
+        <div class="section-title">Behavioural & Soft Skills</div>
+        <div class="section-desc">// use the STAR method for every behavioural answer</div>
+      </div>
+    </div>
+
+    <div class="card tip">
+      <div class="card-label">Framework · Must Know</div>
+      <h3>The STAR Method</h3>
+      <p>Use this structure every time you answer a behavioural question.</p>
+      <div class="star-grid">
+        <div class="star-box">
+          <div class="star-letter">S</div>
+          <div class="star-label">Situation</div>
+          <p>Set the scene. What was the context? Keep it brief.</p>
+        </div>
+        <div class="star-box">
+          <div class="star-letter">T</div>
+          <div class="star-label">Task</div>
+          <p>What was your role or responsibility in that situation?</p>
+        </div>
+        <div class="star-box">
+          <div class="star-letter">A</div>
+          <div class="star-label">Action</div>
+          <p>What did YOU specifically do? Use "I", not "we".</p>
+        </div>
+        <div class="star-box">
+          <div class="star-letter">R</div>
+          <div class="star-label">Result</div>
+          <p>What was the outcome? Quantify if you can. What did you learn?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <p class="section-subtitle">Common behavioural questions</p>
+
+    <div class="card behavioural">
+      <div class="card-label">Behavioural · Classic</div>
+      <h3>"Tell me about yourself."</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <p>Use a 60-second structure: Who you are → What you've done/learned → Why this role.</p>
+        <ul>
+          <li><strong>Who:</strong> "I'm a self-taught IT enthusiast who's been building my skills through hands-on projects and online learning."</li>
+          <li><strong>What:</strong> Mention specific things you've actually done — set up networks, built PCs, fixed devices, completed courses (CompTIA A+, Google IT etc.)</li>
+          <li><strong>Why:</strong> "I'm excited about this role because I want to apply those skills in a professional environment and grow in IT support."</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card behavioural">
+      <div class="card-label">Behavioural · Problem Solving</div>
+      <h3>"Describe a time you solved a difficult technical problem."</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <p>As a self-taught person, draw on personal projects:</p>
+        <ul>
+          <li>Fixing a computer for a family member or friend</li>
+          <li>Troubleshooting your own network or device issues</li>
+          <li>A project where something broke and you had to research a fix</li>
+        </ul>
+        <p style="margin-top:8px">Structure it with STAR — focus on your thought process, what you researched, and the outcome.</p>
+      </div>
+    </div>
+
+    <div class="card behavioural">
+      <div class="card-label">Behavioural · Customer Service</div>
+      <h3>"How do you handle a frustrated or impatient user?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>Stay calm — never match their frustration</li>
+          <li>Listen fully before speaking — let them feel heard</li>
+          <li>Acknowledge their frustration: "I understand this is affecting your work, let me help fix it."</li>
+          <li>Give them updates so they know progress is happening</li>
+          <li>Focus on the solution, not the blame</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card behavioural">
+      <div class="card-label">Behavioural · Honesty</div>
+      <h3>"What do you do when you don't know the answer?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <p>This is a trick question — they want honesty, not overconfidence. Say something like:</p>
+        <ul>
+          <li>"I'd be honest with the user and tell them I'll find the answer."</li>
+          <li>"I'd check documentation, search for the issue online, or ask a colleague."</li>
+          <li>"I believe in escalating when needed rather than guessing and making things worse."</li>
+          <li>Show that you're a learner — self-taught people are good at googling!</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card behavioural">
+      <div class="card-label">Behavioural · Growth</div>
+      <h3>"Why IT Support, and where do you see yourself in 3 years?"</h3>
+      <button class="answer-toggle" onclick="toggleAnswer(this)"><span class="arrow">▶</span> Show how to answer</button>
+      <div class="answer-content">
+        <ul>
+          <li>Be genuine — you've been self-teaching, so share what pulled you into IT</li>
+          <li>Show ambition: "I want to build a strong foundation in support, then grow into networking/cloud/security/sysadmin."</li>
+          <li>Mention certifications you're working toward (CompTIA A+, Network+, Google IT Certificate etc.)</li>
+          <li>Tie it back to the company — show you want to grow WITH them</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card tip">
+      <div class="card-label">Pro Tip · Questions to Ask Them</div>
+      <h3>Always have 2–3 questions ready for the interviewer</h3>
+      <ul>
+        <li>"What does a typical first week look like for someone in this role?"</li>
+        <li>"What tools and ticketing systems does the team use?"</li>
+        <li>"What does the team look like and who would I be supporting?"</li>
+        <li>"Are there opportunities for professional development or certifications?"</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ─── DAY-OF CHECKLIST ─── -->
+  <div id="checklist" class="section">
+    <div class="section-header">
+      <div class="section-icon">✅</div>
+      <div>
+        <div class="section-title">Day-of Checklist</div>
+        <div class="section-desc">// click each item to mark as done</div>
+      </div>
+    </div>
+
+    <div class="card tip">
+      <div class="card-label">The Night Before</div>
+      <h3>Prepare tonight</h3>
+      <ul class="checklist" id="night-list">
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Research the company (what they do, size, industry)</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Re-read the job description — match your skills to their requirements</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Prepare 2–3 personal examples using STAR method</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Review the Technical & Q&A tabs on this page</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Prepare your questions to ask the interviewer</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Plan your outfit — smart/business casual</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Confirm interview time, location or video link</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Get a good night's sleep</li>
+      </ul>
+    </div>
+
+    <div class="card scenario">
+      <div class="card-label">The Day Of</div>
+      <h3>Interview day</h3>
+      <ul class="checklist" id="day-list">
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Eat a proper meal beforehand</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Arrive / log on 10–15 minutes early</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Bring CV/resume printed (or have it open on phone)</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Have a notepad and pen for notes</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Phone on silent</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Breathe — slow down before answering questions</li>
+        <li onclick="toggleCheck(this)"><span class="check-box"></span>Smile, make eye contact, be confident</li>
+      </ul>
+    </div>
+
+    <div class="card tech">
+      <div class="card-label">Mindset Reminders</div>
+      <h3>Remember this going in</h3>
+      <ul>
+        <li>Being self-taught is a STRENGTH — it shows initiative and drive</li>
+        <li>You don't need to know everything — show how you THINK and learn</li>
+        <li>They're also being interviewed by you — assess if it's a good fit</li>
+        <li>If you don't know, say "I'd look that up / ask a colleague / research it"</li>
+        <li>Enthusiasm and attitude matter as much as technical knowledge at entry level</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // Tab navigation
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // Toggle answer visibility
+  function toggleAnswer(btn) {
+    btn.classList.toggle('open');
+    const content = btn.nextElementSibling;
+    content.classList.toggle('open');
+  }
+
+  // Checklist toggle
+  function toggleCheck(li) {
+    li.classList.toggle('done');
+    const box = li.querySelector('.check-box');
+    box.textContent = li.classList.contains('done') ? '✓' : '';
+  }
+
+  // Skills grid
+  const skills = [
+    'Windows OS', 'Networking basics', 'TCP/IP & DNS', 'Active Directory',
+    'Hardware setup', 'Printer support', 'Remote desktop', 'Ticketing tools',
+    'Cybersecurity basics', 'Linux basics', 'Office 365', 'VPN setup',
+    'CMD / Terminal', 'BIOS / UEFI', 'Troubleshooting'
+  ];
+
+  const states = [null, 'learning', 'partial', 'known'];
+  const labels = { null: '', learning: 'Learning', partial: 'Partial', known: 'Known' };
+
+  const grid = document.getElementById('skills-grid');
+  const chipStates = {};
+
+  skills.forEach(skill => {
+    chipStates[skill] = 0;
+    const chip = document.createElement('div');
+    chip.className = 'skill-chip';
+    chip.innerHTML = `<span class="skill-dot"></span><span>${skill}</span>`;
+    chip.onclick = () => {
+      chipStates[skill] = (chipStates[skill] + 1) % 4;
+      const s = states[chipStates[skill]];
+      chip.className = 'skill-chip' + (s ? ' ' + s : '');
+      updateProgress();
+    };
+    grid.appendChild(chip);
+  });
+
+  function updateProgress() {
+    const known = Object.values(chipStates).filter(v => v === 3).length;
+    const partial = Object.values(chipStates).filter(v => v === 2).length;
+    const pct = Math.round(((known + partial * 0.5) / skills.length) * 100);
+    document.getElementById('progress-pct').textContent = pct + '%';
+    document.getElementById('progress-fill').style.width = pct + '%';
+  }
+
+  // Trigger progress bar animation on load
+  setTimeout(updateProgress, 300);
+</script>
+</body>
+</html>
